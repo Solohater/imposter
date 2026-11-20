@@ -1,18 +1,40 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
+import React from 'react';
+import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { View, StyleSheet } from 'react-native';
+import { COLORS } from '@/shared/theme/colors';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
-
-SplashScreen.preventAutoHideAsync();
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+export default function RootLayout() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <View style={styles.container}>
+        <StatusBar style="light" />
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: COLORS.background },
+            animation: 'slide_from_right',
+          }}
+        >
+          <Stack.Screen name="index" options={{ title: 'Home' }} />
+          <Stack.Screen name="players/index" options={{ title: 'Players' }} />
+          <Stack.Screen name="setup/index" options={{ title: 'Setup' }} />
+          <Stack.Screen name="custom/index" options={{ title: 'Custom Packs' }} />
+          <Stack.Screen name="game/reveal" options={{ title: 'Role Reveal', gestureEnabled: false }} />
+          <Stack.Screen name="game/clues" options={{ title: 'Clue Phase', gestureEnabled: false }} />
+          <Stack.Screen name="game/voting" options={{ title: 'Voting', gestureEnabled: false }} />
+          <Stack.Screen name="game/results" options={{ title: 'Results', gestureEnabled: false }} />
+          <Stack.Screen name="stats/index" options={{ title: 'Fairness Stats' }} />
+        </Stack>
+      </View>
+    </SafeAreaProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
+});
